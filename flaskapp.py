@@ -5,7 +5,8 @@ from YOLO_Video import generate_frames_web
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")  # Allow all origins, adjust as needed
+
 
 # The variable to store the latest video data
 latest_video_data = None
