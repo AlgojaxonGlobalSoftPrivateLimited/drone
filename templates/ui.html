@@ -77,11 +77,17 @@
             <img src="{{ url_for('webapp') }}"   alt="Upload video">
 
             <Ion-Card-Content>
-              {% if last_crack_detection %}
+              <!-- {% if last_crack_detection %}
                 <h3>{{ last_crack_detection.class_name }} <p>{{ last_crack_detection.timestamp_column }}</p></h3>
               {% else %}
                 <p>No crack detection found</p>
-              {% endif %}
+              {% endif %} -->
+
+              <div>
+                {% for label in detected_labels %}
+                    <p>{{ label }}</p>
+                {% endfor %}
+            </div>
             </Ion-Card-Content>
           </Ion-Card>
         </ion-card-content>

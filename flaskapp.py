@@ -10,14 +10,14 @@ from YOLO_Video import video_detection
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-import mysql.connector
+# import mysql.connector
 # MySQL Database Configuration
-db = mysql.connector.connect(
-   host="algojaxon.com",
-    user="drone",
-    password="u3F07n1!b",
-    database="drone"
-)
+# db = mysql.connector.connect(
+#    host="algojaxon.com",
+#     user="drone",
+#     password="u3F07n1!b",
+#     database="drone"
+# )
 
 def generate_frames_web(path_x):
     yolo_output = video_detection(path_x)
@@ -43,14 +43,12 @@ def frontpage():
 
 @app.route("/webcam", methods=['GET', 'POST'])
 def webcam():
-    # Fetch the last "crack" detection from the database
-    with db.cursor(dictionary=True) as cursor:
-        cursor.execute("SELECT class_name, timestamp_column FROM detections WHERE class_name='crack' ORDER BY timestamp_column DESC LIMIT 1")
-        last_crack_detection = cursor.fetchone()
+    # Perform object detection and get the image and detected labels
+    img, detected_labels = video_detection(path_x=1)
 
-    # Pass the last "crack" detection to the template
-    return render_template('ui.html', last_crack_detection=last_crack_detection)
-
+    # Pass the detected labels to the template
+    return render_template('ui.html', detected_labels=detected_labels)
+    
 @app.route("/web", methods=['GET','POST'])
 def web():
     session.clear()
