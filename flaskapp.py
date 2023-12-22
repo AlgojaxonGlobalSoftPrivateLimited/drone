@@ -1,71 +1,58 @@
-from flask import Flask, render_template, Response,jsonify,request,session
+from flask import Flask, render_template, Response, jsonify, request, session
 from flask_wtf import FlaskForm
 import secrets
-from wtforms import FileField, SubmitField,StringField,DecimalRangeField,IntegerRangeField
+from wtforms import FileField, SubmitField, StringField, DecimalRangeField, IntegerRangeField
 from werkzeug.utils import secure_filename
-from wtforms.validators import InputRequired,NumberRange
+from wtforms.validators import InputRequired, NumberRange
 import os
 import cv2
-from YOLO_Video import video_detection
+import psycopg2  # Import the PostgreSQL connector
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-# import mysql.connector
-# MySQL Database Configuration
-# db = mysql.connector.connect(
-#    host="algojaxon.com",
-#     user="drone",
-#     password="u3F07n1!b",
-#     database="drone"
-# )
+
+# PostgreSQL Database Configuration
+db_params = {
+    "host": "dpg-cm2k3o6n7f5s73egch0g-a.oregon-postgres.render.com",
+    "user": "drone",
+    "password": "QQrJOIKv90lO3FvdT4sp6wDAkXNVOVy6",
+    "dbname": "drone"
+}
+
+try:
+    db = psycopg2.connect(**db_params)
+except psycopg2.Error as e:
+    print(f"Unable to connect to the database. Error: {e}")
+    exit()
 
 def generate_frames_web(path_x):
-    yolo_output = video_detection(path_x)
-    for detection_ in yolo_output:
-        ref,buffer=cv2.imencode('.jpg',detection_)
+    # Your video_detection function here
+    pass
 
-        frame=buffer.tobytes()
-        yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame +b'\r\n')
-        
-
-@app.route('/', methods=['GET','POST'])
-@app.route('/home', methods=['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/home', methods=['GET', 'POST'])
 def home():
     session.clear()
     return render_template('indexproject.html')
 
-@app.route('/FrontPage', methods=['GET','POST'])
-def frontpage():
-    session.clear()
-    return render_template('videoprojectnew.html')
-
+# Other routes...
 
 @app.route("/webcam", methods=['GET', 'POST'])
 def webcam():
-    # Perform object detection and get the image and detected labels
-    img, detected_labels = video_detection(path_x=1)
+    # Fetch the last "crack" detection from the database
+    try:
+        with db.cursor() as cursor:
+            cursor.execute("SELECT class_name, timestamp_column FROM detections WHERE class_name='crack' ORDER BY timestamp_column DESC LIMIT 1")
+            last_crack_detection = cursor.fetchone()
+    except psycopg2.Error as e:
+        db.rollback()  # Rollback the transaction in case of an error
+        print(f"Error executing SQL query: {e}")
+        last_crack_detection = None
 
-    # Pass the detected labels to the template
-    return render_template('ui.html', detected_labels=detected_labels)
-    
-@app.route("/web", methods=['GET','POST'])
-def web():
-    session.clear()
-    return render_template('web.html')
+    # Pass the last "crack" detection to the template
+    return render_template('ui.html', last_crack_detection=last_crack_detection)
 
-
-@app.route('/chart', methods=['GET','POST'])
-def chart():
-    session.clear()
-    return render_template('chart.html')
-
-# To display the Output Video on Webcam page
-@app.route('/webapp')
-def webapp():
-    #return Response(generate_frames(path_x = session.get('video_path', None),conf_=round(float(session.get('conf_', None))/100,2)),mimetype='multipart/x-mixed-replace; boundary=frame')
-    return Response(generate_frames_web(path_x=1), mimetype='multipart/x-mixed-replace; boundary=frame')
-
+# Other routes...
 
 if __name__ == "__main__":
-    app.run(debug=True,port=8082)
+    app.run(debug=True, port=8082)

@@ -6,6 +6,6 @@ Flask-WTF==0.15.1
 Gunicorn
 yolo
 ultralytics
-mysql.connector
 geopy
+psycopg2
 
