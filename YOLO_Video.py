@@ -1,7 +1,6 @@
 from ultralytics import YOLO
 import cv2
 import math
-import mysql.connector
 from geopy.geocoders import Nominatim
 
 import psycopg2
