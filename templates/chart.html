@@ -1,147 +1,229 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Video</title>
-      <!-- ionic Links -->
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <title>Video</title>
+  <!-- Ionic Links --> <script src="https://cdn.jsdelivr.net/npm/@ionic/core@5.6.14/dist/ionic/ionic.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/angular@1.7.9/angular.min.js"></script>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.js"></script>
+
+  <!-- Add Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 </head>
-<body>
-  <ion-app>
 
+<body>
+  <ion-row>
+    <ion-button onclick="handleButtonClick()" name="Decrypt">Default</ion-button>
+</ion-row>
+
+<!-- Your Flask scripts go here -->
+<script>
+    // Example JavaScript function to handle button click
+    function handleButtonClick() {
+        alert("Button clicked!");
+        // Add your logic here
+    }
+</script>
+  <ion-app>
     <ion-header class="ion-no-border">
       <ion-toolbar>
         <ion-title>
-         <p> <b style="font-weight: bold; color: #bd1f2e;">DRON</b>ACHARYAS</p>
+          <p><b style="font-weight: bold; color: #bd1f2e">DRON</b>ACHARYAS</p>
         </ion-title>
       </ion-toolbar>
-      
-      
-          
-          
-        </ion-toolbar>
-      </ion-header>
+    </ion-header>
 
-
-      
-
-  <br>
+    <ion-content style="height: 100%;" >
+      <!-- Add ion-grid for better layout -->
+      <ion-grid>
   
-  <ion-tabs id="myTabs">
-      
+        <ion-row>
+          <ion-col size="12">
+            <ion-card style="width: 90vw; margin: auto;">
+              <ion-card-header>
+                <ion-card-title>Boiler - 1</ion-card-title>
+                <ion-card-subtitle>Analysis</ion-card-subtitle>
+              </ion-card-header>
+              <div style="width: 80%; margin: auto;">
+                <canvas id="temperatureChart1" width="800" height="200"></canvas>
+              </div>
+            </ion-card>
+          </ion-col>
 
-    <!-- Home Tab -->
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="home"   id="homeTab">
-        <ion-icon name="home"></ion-icon>
-        <ion-label>Home</ion-label>
-      </ion-tab-button>
+          <ion-col size="12">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Boiler - 2</ion-card-title>
+                <ion-card-subtitle>Analysis</ion-card-subtitle>
+              </ion-card-header>
+              <div style="width: 80%; margin: auto;">
+                <canvas id="temperatureChart2" width="800" height="200"></canvas>
+              </div>
+            </ion-card>
+          </ion-col>
+          <ion-col size="12">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Boiler - 3</ion-card-title>
+                <ion-card-subtitle>Analysis</ion-card-subtitle>
+              </ion-card-header>
+              <div style="width: 80%; margin: auto;">
+                <canvas id="temperatureChart3" width="800" height="200"></canvas>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
 
-      <!-- Location Tab -->
-     
-     <ion-tab-button tab="location" id="locationTab">
-        <ion-icon name="location"></ion-icon>
-        <ion-label>Location</ion-label>
-      </ion-tab-button>
+        <!-- Repeat for other charts -->
 
-      <!-- Service Tab -->
-     
-      <ion-tab-button tab="camera"id="cameraTab" >
-        <ion-icon name="camera"></ion-icon>
-        <ion-label>Live</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="charset"id="charsetTab" >
-        <ion-icon name="stats-chart-outline"></ion-icon>
-        <ion-label>Analytics</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-
-
-    <!-- Home Tab Content -->
-    <ion-tab tab="home">
-      <ion-router-outlet name="home">
-      
-        
-
-      </ion-router-outlet>
-    </ion-tab>
-
-    <!-- Location Tab Content -->
-    <ion-tab tab="location">
-      <ion-router-outlet name="location"></ion-router-outlet>
-    </ion-tab>
+      </ion-grid>
+      </ion-card>
+      <br />
 
 
-    <!-- Dashboard Tab Content -->
-    <ion-tab tab="camera">
-      <ion-router-outlet name="camera"></ion-router-outlet>
-    </ion-tab>
+    <ion-tabs id="myTabs" style="position: fixed; ">
+      <!-- Tab buttons -->
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="home" id="homeTab">
+          <ion-icon name="home"></ion-icon>
+          <ion-label>Home</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="location" id="locationTab">
+          <ion-icon name="location"></ion-icon>
+          <ion-label>Location</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="camera" id="cameraTab">
+          <ion-icon name="camera"></ion-icon>
+          <ion-label>Live</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="charset" id="charsetTab">
+          <ion-icon name="stats-chart-outline"></ion-icon>
+          <ion-label>Analytics</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
 
-    <ion-tab tab="charset">
-      <ion-router-outlet name="charset"></ion-router-outlet>
-    </ion-tab>
-  </ion-tabs>
-</ion-app>
+      <!-- Tab Content -->
+      <ion-tab tab="home">
+        <ion-router-outlet name="home"></ion-router-outlet>
+      </ion-tab>
+      <ion-tab tab="location">
+        <ion-router-outlet name="location"></ion-router-outlet>
+      </ion-tab>
+      <ion-tab tab="camera">
+        <ion-router-outlet name="camera"></ion-router-outlet>
+      </ion-tab>
+      <ion-tab tab="charset">
+        <ion-router-outlet name="charset"></ion-router-outlet>
+      </ion-tab>
+    </ion-tabs>
+
+  </ion-content>
+    </ion-app>
+    <!-- Ionic and Ionicons scripts -->
+  
+
+    <!-- Your script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.getElementById("myTabs");
+
+        const homeTab = document.getElementById("homeTab");
+        const locationTab = document.getElementById("locationTab");
+        const cameraTab = document.getElementById("cameraTab");
+        const charsetTab = document.getElementById("charsetTab");
+
+        homeTab.addEventListener("click", function () {
+          // Use select method to set the "home" tab as active
+          tabs.select("home");
+          window.location.href = "/home";
+        });
+
+        locationTab.addEventListener("click", function () {
+          // Use select method to set the "location" tab as active
+          tabs.select("location");
+          window.location.href = "/FrontPage";
+        });
+
+        cameraTab.addEventListener("click", function () {
+          // Use select method to set the "camera" tab as active
+          tabs.select("camera");
+          window.location.href = "/webcam";
+        });
+
+        charsetTab.addEventListener("click", function () {
+          // Use select method to set the "camera" tab as active
+          tabs.select("charset");
+          window.location.href = "/chart";
+        });
+        // Set the default active tab
+        tabs.select("charset");
+      });
+    </script>
 
 
-  </ion-app>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        function initializeChart(canvasId, chartData) {
+          var ctx = document.getElementById(canvasId).getContext('2d');
 
+          var timings = chartData.map(function (entry) {
+            return entry.timing;
+          });
 
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
-  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.js"></script>
+          var temperatures = chartData.map(function (entry) {
+            return entry.temperature;
+          });
 
-<!-- Your script -->
+          var lineColor = 'rgba(75, 192, 192, 1)';
 
+          var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: timings,
+              datasets: [{
+                label: 'Boiler Temperature',
+                data: temperatures,
+                borderColor: lineColor,
+                borderWidth: 2,
+                fill: false
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+            }
+          });
+        }
+
+        initializeChart('temperatureChart1', {{ chart_data| tojson | safe }});
+      initializeChart('temperatureChart2', {{ chart_data2| tojson | safe }});
+      initializeChart('temperatureChart3', {{ chart_data3| tojson | safe }});
+      });
+    </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const tabs = document.getElementById('myTabs');
-  
-      const homeTab = document.getElementById('homeTab');
-      const locationTab = document.getElementById('locationTab');
-      const cameraTab = document.getElementById('cameraTab');
-      const charsetTab = document.getElementById('charsetTab');
-  
-      homeTab.addEventListener('click', function() {
-        // Use select method to set the "home" tab as active
-        tabs.select('home');
-        window.location.href = '/home';
+  // Define Angular module and controller
+  var app = angular.module('myApp', []);
+  app.controller('MyController', function($scope, $ionicPopup) {
+    // Function to show Ionic alert
+    $scope.presentAlert = function() {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Alert',
+        template: 'This is an alert message.'
       });
-  
-      locationTab.addEventListener('click', function() {
-        // Use select method to set the "location" tab as active
-        tabs.select('location');
-        window.location.href = '/FrontPage';
-      });
-  
-      cameraTab.addEventListener('click', function() {
-        // Use select method to set the "camera" tab as active
-        tabs.select('camera');
-        window.location.href = '/webcam';
-      });
-  
-      charsetTab.addEventListener('click', function() {
-        // Use select method to set the "camera" tab as active
-        tabs.select('charset');
-        window.location.href = '/chart';
-      });
-      // Set the default active tab
-      tabs.select('charset');
-    });
-  </script>
-
-  
-
-
-
-  
+    };
+  });
+</script>
 
 </body>
+
 </html>

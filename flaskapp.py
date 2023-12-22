@@ -78,10 +78,39 @@ def web():
     return render_template('web.html')
 
 
+
 @app.route('/chart', methods=['GET','POST'])
 def chart():
+    # Dummy data (replace with your actual data)
+    chart_data = [
+        {'timing': '00:00:00', 'temperature': 920},
+        {'timing': '03:00:00', 'temperature': 840},
+        {'timing': '06:00:00', 'temperature': 1000},
+        {'timing': '10:00:00', 'temperature': 1120},
+        {'timing': '13:00:00', 'temperature': 1180},
+        {'timing': '17:00:00', 'temperature': 1050},
+        {'timing': '21:00:00', 'temperature': 990},
+    ]
+    chart_data2 = [
+        {'timing': '00:00:00', 'temperature': 870},
+        {'timing': '03:00:00', 'temperature': 784},
+        {'timing': '06:00:00', 'temperature': 1134},
+        {'timing': '10:00:00', 'temperature': 1125},
+        {'timing': '13:00:00', 'temperature': 1152},
+        {'timing': '17:00:00', 'temperature': 987},
+        {'timing': '21:00:00', 'temperature': 867},
+    ]
+    chart_data3 = [
+        {'timing': '00:00:00', 'temperature': 937},
+        {'timing': '03:00:00', 'temperature': 872},
+        {'timing': '06:00:00', 'temperature': 1076},
+        {'timing': '10:00:00', 'temperature': 1196},
+        {'timing': '13:00:00', 'temperature': 1056},
+        {'timing': '17:00:00', 'temperature': 965},
+        {'timing': '21:00:00', 'temperature': 786},
+    ]
     session.clear()
-    return render_template('chart.html')
+    return render_template('chart.html',chart_data=chart_data,chart_data2=chart_data2,chart_data3=chart_data3)
 
 # To display the Output Video on Webcam page
 @app.route('/webapp')
