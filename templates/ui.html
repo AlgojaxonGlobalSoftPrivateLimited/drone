@@ -76,13 +76,14 @@
             </Ion-Card-Header>
             <img src="{{ url_for('webapp') }}"   alt="Upload video">
 
-            <Ion-Card-Content>
+            <ion-card-content class="md card-content-md hydrated">
               {% if last_crack_detection %}
-                <h3>{{ last_crack_detection.class_name }} <p>{{ last_crack_detection.timestamp_column }}</p></h3>
+                <h3>Class Name: {{ last_crack_detection[0] }}</h3>
+                <p>Timestamp: {{ last_crack_detection[1] }}</p>
               {% else %}
-                <p>No crack detection found</p>
+                <p>No crack detections found.</p>
               {% endif %}
-            </Ion-Card-Content>
+            </ion-card-content>
           </Ion-Card>
         </ion-card-content>
      

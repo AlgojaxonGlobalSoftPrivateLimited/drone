@@ -72,8 +72,6 @@ def webcam():
 
     # Pass the last "crack" detection to the template
     return render_template('ui.html', last_crack_detection=last_crack_detection)
-
-
 @app.route("/web", methods=['GET','POST'])
 def web():
     session.clear()

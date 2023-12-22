@@ -44,10 +44,23 @@ def get_current_location():
 
 def save_detection_to_database(class_name):
     location = get_current_location()
-    query = "INSERT INTO detections (class_name,location) VALUES (%s,%s)"
-    values = (class_name, location)
-    cursor.execute(query, values)
-    db.commit()
+
+    try:
+        with db.cursor() as cursor:
+            # Clear the entire table
+            cursor.execute("DELETE FROM detections;")
+
+            # Insert new data into the table
+            query = "INSERT INTO detections (class_name, location) VALUES (%s, %s);"
+            values = (class_name, location)
+            cursor.execute(query, values)
+
+        # Commit the changes
+        db.commit()
+        print("Table cleared and new data inserted successfully.")
+    except psycopg2.Error as e:
+        db.rollback()  # Rollback the transaction in case of an error
+        print(f"Error clearing and inserting data: {e}")
 
 def generate_frames_web(path_x):
     # Call the video_detection function here
