@@ -38,8 +38,7 @@
             for customizing the drones and making them work for your needs<br><br><h1>What We Do</h1>
             *FREE SHOPPING<br>*SALES & SERVICE <br>*ONLINE &OFFLINE ORDERS<br>*QUALITY PRODUCTS<br>*CUSTOMIZED DRONES<br>*CUSTOMER SERVICE</p>
           <!-- Wrap the content in an anchor tag with the href attribute pointing to your website -->
-          <h2 id="clickHere"><a href="https://dronacharyas-48aaf.web.app">Click Here...</a>
-</h2>
+          <h2 id="clickHere"><a >Click Here...</a></h2>
 
           <p>For More Details</P>
         </ion-card-content>
@@ -71,6 +70,11 @@
           <ion-icon name="camera"></ion-icon>
           <ion-label>Live</ion-label>
         </ion-tab-button>
+
+        <ion-tab-button tab="charset"id="charsetTab" >
+          <ion-icon name="stats-chart-outline"></ion-icon>
+          <ion-label>Analytics</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
 
 
@@ -88,6 +92,10 @@
       <!-- Dashboard Tab Content -->
       <ion-tab tab="camera">
         <ion-router-outlet name="camera"></ion-router-outlet>
+      </ion-tab>
+
+      <ion-tab tab="charset">
+        <ion-router-outlet name="charset"></ion-router-outlet>
       </ion-tab>
     </ion-tabs>
   </ion-app>
@@ -108,6 +116,7 @@
       const homeTab = document.getElementById('homeTab');
       const locationTab = document.getElementById('locationTab');
       const cameraTab = document.getElementById('cameraTab');
+      const charsetTab = document.getElementById('charsetTab');
 
       homeTab.addEventListener('click', function() {
         // Use select method to set the "home" tab as active
@@ -127,6 +136,12 @@
         window.location.href = '/webcam';
       });
 
+      charsetTab.addEventListener('click', function() {
+        // Use select method to set the "camera" tab as active
+        tabs.select('charset');
+        window.location.href = '/chart';
+      });
+
       // Set the default active tab
       tabs.select('home');
     } else {
@@ -134,8 +149,7 @@
     }
 
     document.getElementById('clickHere').addEventListener('click', function() {
-      console.log('Click Here link clicked.');
-      window.location.href = '/web';
+      window.open(' /web', '_blank');
     });
     
   });

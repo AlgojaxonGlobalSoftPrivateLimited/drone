@@ -1,50 +1,83 @@
 from ultralytics import YOLO
 import cv2
 import math
-import imutils
+import mysql.connector
+from geopy.geocoders import Nominatim
 
-def video_detection(frame):
-    model = YOLO("best.pt")
-    classNames = ["crack"]
+# MySQL Database Configuration
+db = mysql.connector.connect(
+    host="algojaxon.com",
+    user="drone",
+    password="u3F07n1!b",
+    database="drone"
+)
+cursor = db.cursor()
 
-    frame = imutils.resize(frame, width=800)  # Resize the frame (adjust as needed)
-    results = model(frame, stream=True)
+model = YOLO("../YOLO-Weights/best.pt")
+classNames = ["crack"]
+geolocator = Nominatim(user_agent="geo_locator")
 
-    for r in results:
-        boxes = r.boxes
-        for box in boxes:
-            x1, y1, x2, y2 = box.xyxy[0]
-            x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+DEFAULT_LATITUDE = 23.2499640
+DEFAULT_LONGITUDE = 77.5228917
 
-            # Draw bounding box
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 255), 3)
+def get_current_location():
+    try:
+        # Replace with your IP address or leave it empty for automatic detection
+        location = geolocator.geocode("0.0.0.0")
 
-            # Display class label with confidence score
-            conf = math.ceil((box.conf[0] * 100)) / 100
-            cls = int(box.cls[0])
-            class_name = classNames[cls]
-            label = f'{class_name}{conf}'
-            t_size = cv2.getTextSize(label, 0, fontScale=1, thickness=2)[0]
-            c2 = x1 + t_size[0], y1 - t_size[1] - 3
-            cv2.rectangle(frame, (x1, y1), c2, [255, 0, 255], -1, cv2.LINE_AA)  # filled
-            cv2.putText(frame, label, (x1, y1 - 2), 0, 1, [255, 255, 255], thickness=1, lineType=cv2.LINE_AA)
+        if location:
+            return f"{location.latitude}, {location.longitude}"
+        else:
+            return f"{DEFAULT_LATITUDE}, {DEFAULT_LONGITUDE}"
+    except Exception as e:
+        print(f"Error getting location: {e}")
+        return f"{DEFAULT_LATITUDE}, {DEFAULT_LONGITUDE}"
 
-    return frame
+def save_detection_to_database(class_name):
+    location = get_current_location()
+    query = "INSERT INTO detections (class_name,location) VALUES (%s,%s)"
+    values = (class_name, location)
+    cursor.execute(query, values)
+    db.commit()
 
-def generate_frames_web(rtsp_url):
-    cap = cv2.VideoCapture(rtsp_url)
+
+
+def video_detection(path_x):
+    video_capture = path_x
+    cap = cv2.VideoCapture(video_capture)
+    frame_width = int(cap.get(3))
+    frame_height = int(cap.get(4))
 
     while True:
-        success, frame = cap.read()
+        success, img = cap.read()
         if not success:
-            break
+            break  # Exit the loop if no more frames
+          
+        results = model(img, stream=True)
+        for r in results:
+            boxes = r.boxes
+            for box in boxes:
+                x1, y1, x2, y2 = box.xyxy[0]
+                x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+                print(x1, y1, x2, y2)
+                cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
+                conf = math.ceil((box.conf[0] * 100)) / 100
+                cls = int(box.cls[0])
+                class_name = classNames[cls]
+                label = f'{class_name}{conf}'
+                t_size = cv2.getTextSize(label, 0, fontScale=1, thickness=2)[0]
+                print(t_size)
+                c2 = x1 + t_size[0], y1 - t_size[1] - 3
+                cv2.rectangle(img, (x1, y1), c2, [255, 0, 255], -1, cv2.LINE_AA)  # filled
+                cv2.putText(img, label, (x1, y1 - 2), 0, 1, [255, 255, 255], thickness=1, lineType=cv2.LINE_AA)
 
-        detected_frame = video_detection(frame)
+                # Save detection to database
+                save_detection_to_database(class_name)
 
-        _, buffer = cv2.imencode('.jpg', detected_frame)
-        if buffer is not None:
-            frame_bytes = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+        yield img
 
-    cap.release()
+# You may want to add a proper exit condition for the video processing loop
+# For example, add a break statement if a key is pressed or if the video ends
+
+cv2.destroyAllWindows()
+

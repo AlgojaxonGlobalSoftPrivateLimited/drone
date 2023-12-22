@@ -45,6 +45,11 @@
           <ion-icon name="camera"></ion-icon>
           <ion-label>Live<br>(Power Guard)</ion-label>
         </ion-tab-button>
+
+        <ion-tab-button tab="charset"id="charsetTab" >
+          <ion-icon name="stats-chart-outline"></ion-icon>
+          <ion-label>Analytics</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
 
 
@@ -69,9 +74,18 @@
               <Ion-Card-Title>Live Streaming</Ion-Card-Title>
               <Ion-Card-Subtitle class="colo">*Live:(Power Guard)</Ion-Card-Subtitle>
             </Ion-Card-Header>
-            <img src="{{ url_for('webcam') }}"   alt="Upload video">
+            <img src="{{ url_for('webapp') }}"   alt="Upload video">
 
-            <Ion-Card-Content>Detection.</Ion-Card-Content>
+            <Ion-Card-Content>
+              {% if last_crack_detection %}
+                <h3>{{ last_crack_detection.class_name }} <p>{{ last_crack_detection.timestamp_column }}</p></h3>
+              {% else %}
+                <p>No crack detection found</p>
+              {% endif %}
+            </Ion-Card-Content>
+          </Ion-Card>
+        </ion-card-content>
+     
           </Ion-Card>
           
 
@@ -87,6 +101,10 @@
       <!-- Dashboard Tab Content -->
       <ion-tab tab="camera">
         <ion-router-outlet name="camera"></ion-router-outlet>
+      </ion-tab>
+
+      <ion-tab tab="charset">
+        <ion-router-outlet name="charset"></ion-router-outlet>
       </ion-tab>
     </ion-tabs>
   </ion-app>
@@ -107,10 +125,20 @@
     document.getElementById('cameraTab').addEventListener('click', function() {
       window.location.href = '/webcam';
     });
+    document.getElementById('charsetTab').addEventListener('click', function() {
+      window.location.href = '/chart';
+    });
+
+
+    
  // Add the following code to make the "Live" tab active by default
  document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('cameraTab').setAttribute('aria-selected', 'true');
 });
+3
+
+
+
 </script>
 
 
