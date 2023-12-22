@@ -116,7 +116,7 @@ def chart():
 @app.route('/webapp')
 def webapp():
     #return Response(generate_frames(path_x = session.get('video_path', None),conf_=round(float(session.get('conf_', None))/100,2)),mimetype='multipart/x-mixed-replace; boundary=frame')
-    return Response(generate_frames_web(path_x=1), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(generate_frames_web(path_x=0), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 if __name__ == "__main__":
